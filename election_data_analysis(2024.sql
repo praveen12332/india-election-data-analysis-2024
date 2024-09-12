@@ -1,3 +1,90 @@
+--1.total number of constituencies
+select 
+distinct count(Parliament_Constituency) 
+from constituencyWise_result;
+--2.What is the total number of seats available for elections in each state
+select 
+	s.state as state_nmae,
+	count(cr.Parliament_Constituency)as total_seats
+	from constituencyWise_result as cr
+	inner join state_Wise_result sr
+	on cr.Parliament_Constituency=sr.Parliament_Constituency
+	inner join States s
+	on sr.state_id=s.state_id
+	group by s.state
+	order by s.state
+--3.total seats won by NDA alliance
+select
+	 sum(case
+			when party in (
+				'Bharatiya Janata Party - BJP',
+				'Telugu Desam - TDP',
+				'Janata Dal  (United) - JD(U)',
+				'Shiv Sena - SHS',
+				'AJSU Party - AJSUP',
+				'Apna Dal (Soneylal) - ADAl',
+				'Asom Gana Parishad - AGP',
+				'Hindustani Awam Morcha (Secular) - HAMS',
+				'Janasena Party - Jnp',
+				'Janata Dal  (Secular) - JD(S)',
+				'Lok Janshakti Party(Ram Vilas) - LJPRV',
+				'Nationalist Congress Party - NCP',
+				'Rashtriya Lok Dal - RLD',
+				'Sikkim Krantikari Morcha - SKM'
+				) then [Won]
+				else 0
+				end) as  NDA_Total_Seats_won
+				from partywise_result;
+--4.no of seats won by NDA alliance
+select
+	party as party_name,
+	Won as  seats_won
+	from partywise_result
+	where party in (
+					'Bharatiya Janata Party - BJP',
+					'Telugu Desam - TDP',
+					'Janata Dal  (United) - JD(U)',
+					'Shiv Sena - SHS',
+					'AJSU Party - AJSUP',
+					'Apna Dal (Soneylal) - ADAl',
+					'Asom Gana Parishad - AGP',
+					'Hindustani Awam Morcha (Secular) - HAMS',
+					'Janasena Party - Jnp',
+					'Janata Dal  (Secular) - JD(S)',
+					'Lok Janshakti Party(Ram Vilas) - LJPRV',
+					'Nationalist Congress Party - NCP',
+					'Rashtriya Lok Dal - RLD',
+					'Sikkim Krantikari Morcha - SKM'
+					) order by seats_won desc;
+--5.total seats won by I.N.D.I.A alliance party
+select 
+	sum(case 
+	when party in (
+	'Indian National Congress - INC',
+                'Aam Aadmi Party - AAAP',
+                'All India Trinamool Congress - AITC',
+                'Bharat Adivasi Party - BHRTADVSIP',
+                'Communist Party of India  (Marxist) - CPI(M)',
+                'Communist Party of India  (Marxist-Leninist)  (Liberation) - CPI(ML)(L)',
+                'Communist Party of India - CPI',
+                'Dravida Munnetra Kazhagam - DMK',
+                'Indian Union Muslim League - IUML',
+                'Nat`Jammu & Kashmir National Conference - JKN',
+                'Jharkhand Mukti Morcha - JMM',
+                'Jammu & Kashmir National Conference - JKN',
+                'Kerala Congress - KEC',
+                'Marumalarchi Dravida Munnetra Kazhagam - MDMK',
+                'Nationalist Congress Party Sharadchandra Pawar - NCPSP',
+                'Rashtriya Janata Dal - RJD',
+                'Rashtriya Loktantrik Party - RLTP',
+                'Revolutionary Socialist Party - RSP',
+                'Samajwadi Party - SP',
+                'Shiv Sena (Uddhav Balasaheb Thackrey) - SHSUBT',
+                'Viduthalai Chiruthaigal Katchi - VCK'
+	)THEN [Won]
+	else 0
+	end) as num_of_seats
+	from partywise_result;
 --5.total seats won by I.N.D.I.A alliance party
 select 
 	sum(case 
